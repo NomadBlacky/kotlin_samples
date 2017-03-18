@@ -70,5 +70,35 @@ class BasicSyntaxSpec : FunSpec() {
             whenWhithoutArg(1) shouldBe "one"
             whenWhithoutArg(2) shouldBe "huh?"
         }
+
+        test("for Statement") {
+            for (n in 1..5) {
+                println(n)
+            }
+        }
+
+        test("Nullable") {
+            // compilation error
+            // val a: String = null
+            val b: String? = null // ok
+
+            // Error: Only safe (?.) or non-null asserted (!!.)
+            // calls are allowed on a nullable receiver of type String?
+            // val l = b.length
+
+            // Checking for null
+            val l = if (b != null && 0 < b.length) {
+                fail("")
+            } else {
+                -1
+            }
+            l shouldBe -1
+            // Safe Calls
+            (b?.length ?: -1) shouldBe -1
+
+            shouldThrow<KotlinNullPointerException> {
+                b!!.length
+            }
+        }
     }
 }
