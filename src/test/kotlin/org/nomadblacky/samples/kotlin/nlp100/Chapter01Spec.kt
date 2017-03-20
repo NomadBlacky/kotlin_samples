@@ -44,13 +44,31 @@ class Chapter01Spec : FunSpec() {
             println(result)
         }
 
+        fun ngram(input: String, n: Int): List<String> {
+            val last = input.length - n
+            return (0..last).map { input.slice(IntRange(it, (it + n - 1))) }.toList()
+        }
+
         test("05. n-gram") {
-            fun ngram(input: String, n: Int): List<String> {
-                val last = input.length - n
-                return (0..last).map { input.slice(IntRange(it, (it + n - 1))) }.toList()
-            }
             val text = "I am an NLPer"
             println(ngram(text, 2))
+        }
+
+        test("06. 集合") {
+            val x = "paraparaparadise"
+            val y = "paragraph"
+            val biGramX = ngram(x, 2)
+            val biGramY = ngram(y, 2)
+            println(biGramX.toHashSet() + biGramY.toHashSet())
+            println(biGramX.toHashSet() intersect biGramY.toHashSet())
+            println(biGramX.toHashSet() - biGramY.toHashSet())
+            println(biGramX.contains("se"))
+            println(biGramY.contains("se"))
+        }
+
+        test("07. テンプレートによる文生成") {
+            fun getText(x: Int, y: String, z: Double): String = "%d時の%sは%.1f".format(x, y, z)
+            getText(12, "気温", 22.4) shouldBe "12時の気温は22.4"
         }
     }
 }
