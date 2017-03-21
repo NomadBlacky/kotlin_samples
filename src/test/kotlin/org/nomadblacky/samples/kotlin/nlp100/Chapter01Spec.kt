@@ -70,5 +70,14 @@ class Chapter01Spec : FunSpec() {
             fun getText(x: Int, y: String, z: Double): String = "%d時の%sは%.1f".format(x, y, z)
             getText(12, "気温", 22.4) shouldBe "12時の気温は22.4"
         }
+
+        test("08. 暗号文") {
+            fun chpher(text: String): String {
+                return text.map { if (it.isLowerCase()) (219 - it.toInt()).toChar() else it }.joinToString(separator = "")
+            }
+            val text = "I have a pen. I have an apple."
+            text.let(::chpher).let(::chpher) shouldBe text
+        }
+
     }
 }
