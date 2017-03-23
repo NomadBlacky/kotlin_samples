@@ -1,6 +1,7 @@
 package org.nomadblacky.samples.kotlin.nlp100
 
 import io.kotlintest.specs.FunSpec
+import java.util.*
 
 /**
  * 言語処理100本ノック 第1章
@@ -79,5 +80,32 @@ class Chapter01Spec : FunSpec() {
             text.let(::chpher).let(::chpher) shouldBe text
         }
 
+        test("09. Typoglycemia") {
+            fun <T> shuffle(list: List<T>): List<T> {
+                val random = Random()
+                val mList = list.toMutableList()
+                for (i in 0..(list.size - 1)) {
+                    val randomIndex = random.nextInt(list.size)
+                    val tmp = mList[i]
+                    mList[i] = mList[randomIndex]
+                    mList[randomIndex] = tmp
+                }
+                return mList
+            }
+            fun typoglycemia(text: String): String {
+                val words = text.split(Regex("\\s"))
+                return words.map {
+                    if (4 <= it.length)
+                        "%s%s%s".format(
+                                it.first(),
+                                it.drop(1).dropLast(1).toList().let(::shuffle).joinToString(separator = ""),
+                                it.last()
+                        )
+                    else it
+                }.joinToString(separator = " ")
+            }
+            val text = "I couldn't believe that I could actually understand what I was reading : the phenomenal power of the human mind ."
+            println(typoglycemia(text))
+        }
     }
 }
