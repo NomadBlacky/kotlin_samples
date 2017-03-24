@@ -23,7 +23,9 @@ class Chapter02Spec : FunSpec() {
         }
 
         test("11. タブをスペースに置換") {
-            
+            val replaced = resource.readText().replace("\t", " ")
+            val tr = execProcess("sed", "-E", """s/\t/ /g""", resource.path)
+            replaced shouldBe tr
         }
     }
 }
