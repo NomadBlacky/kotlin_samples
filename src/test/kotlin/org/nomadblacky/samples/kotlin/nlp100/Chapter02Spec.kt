@@ -3,6 +3,9 @@ package org.nomadblacky.samples.kotlin.nlp100
 import io.kotlintest.specs.FunSpec
 
 /**
+ * 言語処理100本ノック 第2章
+ * http://www.cl.ecei.tohoku.ac.jp/nlp100/#ch2
+ *
  * Created by blacky on 17/03/25.
  */
 class Chapter02Spec : FunSpec() {
