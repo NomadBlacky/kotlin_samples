@@ -30,5 +30,19 @@ class Chapter02Spec : FunSpec() {
             val tr = execProcess("sed", "-E", """s/\t/ /g""", resource.path)
             replaced shouldBe tr
         }
+
+        test("12. 1列目をcol1.txtに，2列目をcol2.txtに保存") {
+            val columns =
+                    resource.readText().lines().filter(String::isNotEmpty)
+                            .map { it.split(Regex("\\s")) }
+                            .map { it.get(0) to it.get(1) }
+            val col1 = columns.map { it.first }.joinToString(separator = "\n")
+            val col2 = columns.map { it.second }.joinToString(separator = "\n")
+            val cut1 = execProcess("cut", "-f1", resource.path).trim()
+            val cut2 = execProcess("cut", "-f2", resource.path).trim()
+
+            col1 shouldBe cut1
+            col2 shouldBe cut2
+        }
     }
 }
