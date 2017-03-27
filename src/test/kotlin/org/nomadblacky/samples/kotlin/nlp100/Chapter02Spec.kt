@@ -69,5 +69,13 @@ class Chapter02Spec : FunSpec() {
 
             result shouldBe paste
         }
+
+        test("14. 先頭からN行を出力") {
+            val n = 5
+            val result = resource.readText().lines().take(n).joinToString(separator = "\n")
+            val head = execProcess("head", "-n", n.toString(), resource.path).trim()
+            result shouldBe head
+        }
+
     }
 }
