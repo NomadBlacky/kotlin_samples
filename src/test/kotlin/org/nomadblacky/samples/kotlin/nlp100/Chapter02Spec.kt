@@ -55,6 +55,19 @@ class Chapter02Spec : FunSpec() {
             File(resultDir, "col2.txt").printWriter().use { it.print(col2) }
         }
 
+        test("13. col1.txtとcol2.txtをマージ") {
+            val f1 = File(resultDir, "col1.txt")
+            val f2 = File(resultDir, "col2.txt")
+            if (f1.exists().not() or f2.exists().not()) {
+                throw IllegalStateException("File not found")
+            }
+
+            val result = f1.readText().lines().zip(f2.readText().lines()).joinToString(separator = "\n") {
+                it.toList().joinToString(separator = "\t")
+            }
+            val paste = execProcess("paste", f1.path, f2.path).trim()
+
+            result shouldBe paste
         }
     }
 }
