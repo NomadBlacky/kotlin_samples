@@ -1,6 +1,8 @@
 package org.nomadblacky.samples.kotlin.nlp100
 
 import io.kotlintest.specs.FunSpec
+import java.io.File
+import kotlin.io.*
 
 /**
  * 言語処理100本ノック 第2章
@@ -9,16 +11,21 @@ import io.kotlintest.specs.FunSpec
  * Created by blacky on 17/03/25.
  */
 class Chapter02Spec : FunSpec() {
-    private val resource = javaClass.getResource("hightemp.txt")!!
-
-    fun execProcess(vararg cmd: String): String {
-        val process = ProcessBuilder(*cmd).start()
-        process.waitFor()
-        val result = process.inputStream.bufferedReader().readText()
-        return result
-    }
-
     init {
+        val resource = javaClass.getResource("hightemp.txt")!!
+
+        fun execProcess(vararg cmd: String): String {
+            val process = ProcessBuilder(*cmd).start()
+            process.waitFor()
+            val result = process.inputStream.bufferedReader().readText()
+            return result
+        }
+
+        val resultDir = File("build/nlp100/")
+        if (resultDir.exists().not() and resultDir.mkdirs()) {
+            throw IllegalStateException("Faild to create folder.")
+        }
+
         test("10. 行数のカウント") {
             val lines = resource.readText().lines().filter(String::isNotEmpty).size
             val wcLines = execProcess("wc", "-l", resource.path).split(" ").first().toInt()
@@ -43,6 +50,11 @@ class Chapter02Spec : FunSpec() {
 
             col1 shouldBe cut1
             col2 shouldBe cut2
+
+            File(resultDir, "col1.txt").printWriter().use { it.print(col1) }
+            File(resultDir, "col2.txt").printWriter().use { it.print(col2) }
+        }
+
         }
     }
 }
