@@ -77,5 +77,11 @@ class Chapter02Spec : FunSpec() {
             result shouldBe head
         }
 
+        test("15. 末尾のN行を出力") {
+            val n = 5
+            val result = resource.readText().lines().dropLastWhile(String::isEmpty).takeLast(n).joinToString(separator = "\n")
+            val tail = execProcess("tail", "-n", n.toString(), resource.path).trim()
+            result shouldBe tail
+        }
     }
 }
