@@ -2,6 +2,7 @@ package org.nomadblacky.samples.kotlin.nlp100
 
 import io.kotlintest.specs.FunSpec
 import java.io.File
+import java.util.logging.Logger
 import kotlin.io.*
 
 /**
@@ -12,18 +13,24 @@ import kotlin.io.*
  */
 class Chapter02Spec : FunSpec() {
     init {
+        val logger = Logger.getLogger(this.javaClass.name)
         val resource = javaClass.getResource("hightemp.txt")!!
 
         fun execProcess(vararg cmd: String): String {
+            logger.info(cmd.joinToString(separator = " "))
             val process = ProcessBuilder(*cmd).start()
             process.waitFor()
             val result = process.inputStream.bufferedReader().readText()
             return result
         }
 
-        val resultDir = File("build/nlp100/")
-        if (resultDir.exists().not() and resultDir.mkdirs()) {
-            throw IllegalStateException("Faild to create folder.")
+        val resultDirPath = "build/nlp100/"
+        val resultDir = File(resultDirPath)
+        if (resultDir.exists() and resultDir.deleteRecursively().not()) {
+            throw IllegalStateException("Failed to delete folder.")
+        }
+        if (resultDir.exists().not() and resultDir.mkdirs().not()) {
+            throw IllegalStateException("Failed to create folder.")
         }
 
         test("10. 行数のカウント") {
