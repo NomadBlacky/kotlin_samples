@@ -90,5 +90,27 @@ class Chapter02Spec : FunSpec() {
             val tail = execProcess("tail", "-n", n.toString(), resource.path).trim()
             result shouldBe tail
         }
+
+        test("16. ファイルをN分割する") {
+            fun <T> List<T>.split(count: Int): List<List<T>> {
+                fun next(list: List<T>): List<List<T>> {
+                    if (list.isEmpty()) return listOf(list)
+                    val l = list.take(count)
+                    return listOf(l) + next(list.drop(count))
+                }
+                return next(this)
+            }
+            val n = 5
+            val result = resource.readText().lines().split(n)
+            execProcess("split", "-l", n.toString(), resource.path, "%sout.".format(resultDirPath))
+            val split = resultDir.listFiles()
+                    .filter { it.isFile and it.name.startsWith("out.") }
+                    .sortedBy { it.name }
+                    .map { it.readLines() }
+            result.forEach(::println)
+            println()
+            split.forEach(::println)
+            result shouldBe split
+        }
     }
 }
