@@ -94,22 +94,21 @@ class Chapter02Spec : FunSpec() {
         test("16. ファイルをN分割する") {
             fun <T> List<T>.split(count: Int): List<List<T>> {
                 fun next(list: List<T>): List<List<T>> {
-                    if (list.isEmpty()) return listOf(list)
+                    if (list.size < count) return listOf(list)
                     val l = list.take(count)
                     return listOf(l) + next(list.drop(count))
                 }
                 return next(this)
             }
             val n = 5
-            val result = resource.readText().lines().split(n)
+            val result = resource.readText().lines().filter(String::isNotEmpty).split(n)
+
             execProcess("split", "-l", n.toString(), resource.path, "%sout.".format(resultDirPath))
             val split = resultDir.listFiles()
                     .filter { it.isFile and it.name.startsWith("out.") }
                     .sortedBy { it.name }
                     .map { it.readLines() }
-            result.forEach(::println)
-            println()
-            split.forEach(::println)
+
             result shouldBe split
         }
     }
