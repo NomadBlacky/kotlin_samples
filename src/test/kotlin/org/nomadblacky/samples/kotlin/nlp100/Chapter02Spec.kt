@@ -111,5 +111,21 @@ class Chapter02Spec : FunSpec() {
 
             result shouldBe split
         }
+
+        test("17. １列目の文字列の異なり") {
+            val result =
+                    resource.readText().lines().filter(String::isNotEmpty)
+                            .map { it.split("\t").first() }
+                            .toHashSet()
+                            .sortedBy { it }
+            val uniq = execProcess(
+                    "/bin/sh",
+                    "-c",
+                    "cat ${resource.path} | cut -f1 | sort | uniq")
+                    .lines()
+                    .filter(String::isNotEmpty)
+
+            result should containInAnyOrder(*uniq.toTypedArray())
+        }
     }
 }
