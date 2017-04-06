@@ -127,5 +127,14 @@ class Chapter02Spec : FunSpec() {
 
             result should containInAnyOrder(*uniq.toTypedArray())
         }
+
+        test("18. 各行を3コラム目の数値の降順にソート") {
+            val result =
+                    resource.readText().lines().filter(String::isNotEmpty)
+                            .sortedByDescending { it.split("\t")[2].toDouble() }
+            val sort = execProcess("sort", "-r", "-k3", resource.path).lines().filter(String::isNotEmpty)
+
+            result shouldBe sort
+        }
     }
 }
