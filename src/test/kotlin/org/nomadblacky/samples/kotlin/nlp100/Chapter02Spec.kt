@@ -136,5 +136,29 @@ class Chapter02Spec : FunSpec() {
 
             result shouldBe sort
         }
+
+        test("19. 各行の1コラム目の文字列の出現頻度を求め，出現頻度の高い順に並べる") {
+            val result =
+                    resource.readText().lines().filter(String::isNotEmpty)
+                            .map { it.split("\t")[0] }
+                            .fold(mutableMapOf<String, Int>()) { acc, str ->
+                                acc.put(str, (acc[str] ?: 0) + 1)
+                                acc
+                            }
+                            .entries
+                            .sortedByDescending { it.value }
+                            .map { Pair(it.value, it.key) }
+            val cmd =
+                    execProcess(
+                            "/bin/sh",
+                            "-c",
+                            "cat ${resource.path} | cut -f1 | sort | uniq -c | sort -r | sed -E 's/^ *//g'")
+                            .lines()
+                            .filter(String::isNotEmpty)
+                            .map { it.split(" ") }
+                            .map { Pair(it[0].toInt(), it[1]) }
+
+            result should containInAnyOrder(*cmd.toTypedArray())
+        }
     }
 }
