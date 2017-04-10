@@ -141,13 +141,9 @@ class Chapter02Spec : FunSpec() {
             val result =
                     resource.readText().lines().filter(String::isNotEmpty)
                             .map { it.split("\t")[0] }
-                            .fold(mutableMapOf<String, Int>()) { acc, str ->
-                                acc.put(str, (acc[str] ?: 0) + 1)
-                                acc
-                            }
-                            .entries
-                            .sortedByDescending { it.value }
-                            .map { Pair(it.value, it.key) }
+                            .groupBy { it }
+                            .map { Pair(it.value.size, it.key) }
+
             val cmd =
                     execProcess(
                             "/bin/sh",
