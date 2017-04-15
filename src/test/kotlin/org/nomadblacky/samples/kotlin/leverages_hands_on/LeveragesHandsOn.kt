@@ -262,6 +262,11 @@ class LeveragesHandsOn : FunSpec() {
              *
              * Q. 静的コード解析?
              * A. ない? FindBugsはclassファイルに対して解析するのでいけるかも?
+             *
+             * Q. Android開発について
+             * A. Kotlinスタートブック読もう
+             * A. Java ←→ Kotlin の連携がハマりポイント
+             * A. IntelliJにJava → Kotlinに変換する機能がある
              */
         }
     }
